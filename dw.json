@@ -1,0 +1,66 @@
+{
+    "_comment": " model parameters",
+    "model":{
+	"type_map":		["Ca","Cl","H","O"],
+	"descriptor" :{
+	    "type":		"se_e2_a",
+	    "sel":		[30,60,180,120],
+	    "rcut_smth":	0.50,
+	    "rcut":		7.50,
+	    "neuron":		[25,50,100],
+	    "resnet_dt":	false,
+	    "axis_neuron":	16,
+	    "seed":		1,
+	    "_comment":		" that's all"
+	},
+	"fitting_net": {
+	    "type":		"dipole",
+	    "dipole_type":	[1,3],
+	    "neuron":		[240,240,240],
+	    "resnet_dt":	true,
+	    "seed":		1,
+	    "_comment":		" that's all"
+	},
+	"_comment":	" that's all"
+    },
+    
+    "learning_rate" :{
+	"type":		"exp",
+	"start_lr":	0.01,
+	"stop_lr":	1e-7,
+	"decay_steps":	50000,
+	"_comment":	"that's all"
+    },
+
+    "loss": {
+	"type":		"tensor",
+	"pref":		0.0,
+	"pref_atomic":	1.0,
+	"_comment": " that's all"
+    },
+
+    "_comment": " traing controls",
+    "training": {
+	"training_data": {
+            "systems":		"/data/run01/scv7364/cuiyx/atomic-npy/dp-dipole-1-try/wc-data/",
+	    "batch_size":	"auto",    
+	    "_comment":		"that's all"
+	},
+
+	"numb_steps":	10000000,
+	"seed":		1,
+
+	"_comment": " display and restart",
+	"_comment": " frequencies counted in batch",
+	"disp_file":	"lcurve.out",
+	"disp_freq":	1000,
+	"save_freq":	5000,
+	"save_ckpt":	"model.ckpt",
+	"disp_training":true,
+	"time_training":true,
+	"_comment":	"that's all"
+    },
+
+    "_comment":		"that's all"
+}
+
