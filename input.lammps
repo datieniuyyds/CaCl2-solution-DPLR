@@ -1,0 +1,61 @@
+variable        NSTEPS          equal 4000000
+variable        THERMO_FREQ     equal 1
+variable        DUMP_FREQ       equal 1000
+variable        BETA            equal 0.4
+variable        KMESH           equal 78
+variable        TEMP            equal 333.000000
+variable        PRES            equal 1.000000
+variable        TAU_T           equal 0.100000
+variable        TAU_P           equal 0.500000
+
+units           metal
+boundary        p p p
+atom_style      full
+
+neighbor        2.0 bin
+neigh_modify    every 1 delay 0 check no exclude type 2 5 exclude type 4 6
+
+box             tilt large
+read_data       final_conf.lmp
+write_data      init.lmp
+
+group           real_atom type 1 2 3 4
+group           virtual_atom type 5 6
+
+mass            1 40.000000
+mass            2 35.500000
+mass            3 1.000000
+mass            4 16.000000
+mass            5 35.500000
+mass            6 16.000000
+
+plugin load     libdeepmd_lmp.so
+pair_style      deepmd ./ener-25kw-compress.pb
+pair_coeff      * *
+bond_style      zero
+bond_coeff      *
+special_bonds   lj/coul 1 1 1 angle no
+
+kspace_style	pppm/dplr 1e-5
+kspace_modify	gewald ${BETA} diff ik mesh ${KMESH} ${KMESH} ${KMESH}
+
+fix             0 all dplr model ener-25kw-compress.pb type_associate 2 5 4 6 bond_type 1 2
+fix_modify      0 virial yes
+
+thermo_style    custom step temp pe ke etotal press vol lx ly lz xy xz yz
+thermo          ${THERMO_FREQ}
+dump            1 all custom ${DUMP_FREQ} traj.dump id type x y z fx fy fz
+dump_modify     1 sort id
+dump            2 all xtc ${DUMP_FREQ} traj-unwrap.xtc
+dump_modify     2 unwrap yes
+
+restart         ${DUMP_FREQ} latest.restart
+
+compute         real_temp real_atom temp
+compute         real_press all pressure real_temp
+fix             1 real_atom npt temp ${TEMP} ${TEMP} ${TAU_P} iso ${PRES} ${PRES} ${TAU_P}
+fix_modify	1 temp real_temp
+
+timestep        0.000500
+run             ${NSTEPS} upto
+write_data      output.lmp nocoeff
