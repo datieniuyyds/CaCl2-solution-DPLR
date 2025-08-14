@@ -1,3 +1,7 @@
+Article Title: Study of concentration dependent microstructures and dynamic behaviors of aqueous CaCl2 solutions via deep potential with electrostatic interactions   
+
+doi: 10.1063/5.0270174
+
 1-10POSCAR, 1-24POSCAR, 1-83POSCAR, pure_water-POSCAR and param.json are the initial structure files for the DP-Gen iteration cycle.
 
 input.json is the input file required to train the standard DP model.
@@ -12,6 +16,4 @@ ener.json and dw-1000w.pb are the input files required to train the DPLR model.
 
 in.data and input.lammps are the input files to run DPLR simulation.
 
-Ca-0-coordination.py, ava-angle-dist-error bar line.py, hbnum.py, adf-make.py, rdf-plot.py and stderr-water-test-new.py are script files for data analysis.
-
-note: The DPLR model file is too large to upload. If you need it, please contact the corresponding author to obtain it.
+note: The DPLR model file is too large to upload. If you need it, please contact the corresponding author to obtain it. If you use the above data, you need to cite the article.
